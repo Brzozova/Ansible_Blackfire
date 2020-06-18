@@ -1,0 +1,16 @@
+ ---
+ 
+- name: stop blackfire
+  service:
+    name: blackfire-agent
+    state: stopped
+
+- name: start blackfire
+  service:
+    name: blackfire-agent
+    state: started
+ 
+- name: restart fpm
+  systemd:
+    name: php{{ php_version }}-fpm
+    state: restarted

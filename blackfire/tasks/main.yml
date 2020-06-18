@@ -1,0 +1,71 @@
+---
+
+- name: Configure the Debian Repository
+  block:
+
+    - name: Register the packagecloud key
+      apt_key:
+        url: https://packages.blackfire.io/gpg.key
+        state: present
+
+    - name: Add the repository to Debian source list
+      apt_repository:
+        repo: deb http://packages.blackfire.io/debian any main
+        state: present
+        filename: blackfire.list
+        update_cache: yes
+
+    - name: Repositories update
+      apt:
+        update_cache: yes
+
+  tags: repo_configuration
+
+
+- name: Install and configure Blackfire-agent
+  block:
+
+    - name: Install the blackfire-agent package
+      apt:
+        pkg: blackfire-agent
+        state: present
+        update_cache: true
+      notify: start blackfire
+
+    - name: Set server-id
+      replace:
+        path: /etc/blackfire/agent
+        regexp: '(^|;)server-id(.*)'
+        replace: 'server-id={{ server_id }}'
+      notify: start blackfire
+
+    - name: Set server-token
+      replace:
+        path: /etc/blackfire/agent
+        regexp: '(^|;)server-token(.*)'
+        replace: 'server-token={{ server_token }}'
+      notify: start blackfire
+
+    - name: Set log-file
+      replace:
+        path: /etc/blackfire/agent
+        regexp: '(^|;)log-file(.*)'
+        replace: 'log-file={{ log_file }}'
+      notify: start blackfire
+
+    - name: Set log-level to debug
+      replace:
+        path: /etc/blackfire/agent
+        regexp: '(^|;)log-level(.*)'
+        replace: 'log-level={{ log_level }}'
+      notify: start blackfire
+
+  tags: blackfire_agent
+
+- name: Install the blackfire-php package
+  apt:
+    pkg: blackfire-php
+    state: present
+    update_cache: true
+  notify: restart fpm
+

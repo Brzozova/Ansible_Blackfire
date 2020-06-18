@@ -1,0 +1,6 @@
+server_id: ""
+server_token: ""
+log_file: "/var/log/blackfire/agent.log"
+log_level: "4"
+php_version: "7.3"
+
