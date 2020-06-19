@@ -4,13 +4,12 @@ Blackfire is Performance Management Solution for developers.
 
 It helps to profile, test, debug, and optimize performance of applications.
 
-Should be deployed only on dev instances.
-
 
 ### Requirements
 
 - PHP installed
-
+- Blackfire client installed (eg. Blackfire extention in web browser)
+- Generated server id and token to authenticate.
 
 ### Role variables
 
